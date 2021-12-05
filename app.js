@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 // 取得資料庫連線狀態
 const db = mongoose.connection
 const port = 3000
+const exphbs = require('express-handlebars')
 
 mongoose.connect('mongodb://localhost/todo_list', { useNewUrlParser: true, useUnifiedTopology: true })
 
@@ -19,8 +20,11 @@ db.once('open', () => {
   console.log('mongodb connected')
 })
 
+app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
+app.set('view engine', 'hbs')
+
 app.get('/', (req, res) => {
-  res.send('Hello World')
+  res.render('index')
 })
 
 app.listen(port, () => {
