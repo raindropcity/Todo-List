@@ -48,13 +48,14 @@ app.get('/todos/new', (req, res) => {
   res.render('new')
 })
 
+// 新增一筆資料
 app.post('/todos', (req, res) => {
   const name = req.body.name // 從 req.body拿出表單裡的name資料(關於req.body見password generator專案中有解釋)
 
   // create()：直接呼叫Todo物件新增資料
   Todo.create({ name })
     .then(() => { res.redirect('/') })
-    .catch((error) => console.error(EvalError))
+    .catch((error) => console.error(error))
 
   // 另一種寫法：另外設定一個變數存放新增資料的實體，然後用save()將新增的資料存入資料庫
   // const todo = new Todo({ name })
@@ -62,6 +63,15 @@ app.post('/todos', (req, res) => {
   // todo.save()
   //   .then(() => { res.redirect('/') }) // 資料新增完成後導回首頁
   //   .catch((error) => { console.error(error) })
+})
+
+// 瀏覽一筆資料，見筆記「動態路由」
+app.get('/todos/:id', (req, res) => {
+  const id = req.params.id
+  Todo.findById(id)
+    .lean()
+    .then((todo) => { res.render('detail', { todo: todo }) })
+    .catch((error) => { console.error(error) })
 })
 
 app.listen(port, () => {
