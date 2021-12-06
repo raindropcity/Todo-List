@@ -53,7 +53,7 @@ app.post('/todos', (req, res) => {
   const name = req.body.name // 從 req.body拿出表單裡的name資料(關於req.body見password generator專案中有解釋)
 
   // create()：直接呼叫Todo物件新增資料
-  Todo.create({ name })
+  return Todo.create({ name })
     .then(() => { res.redirect('/') })
     .catch((error) => console.error(error))
 
@@ -65,12 +65,38 @@ app.post('/todos', (req, res) => {
   //   .catch((error) => { console.error(error) })
 })
 
-// 瀏覽一筆資料，見筆記「動態路由」
+// 瀏覽一筆特定資料，見筆記「動態路由」
 app.get('/todos/:id', (req, res) => {
   const id = req.params.id
-  Todo.findById(id)
+  // findById()：以id去資料庫尋找某特定資料
+  return Todo.findById(id)
     .lean()
     .then((todo) => { res.render('detail', { todo: todo }) })
+    .catch((error) => { console.error(error) })
+})
+
+// 修改一筆特定資料
+app.get('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  // findById()：以id去資料庫尋找某特定資料
+  return Todo.findById(id)
+    .lean()
+    .then((todo) => { res.render('edit', { todo: todo }) })
+    .catch((error) => { console.error(error) })
+})
+
+app.post('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  const name = req.body.name
+
+  // 在「新增資料」時，比較過 Todo.create() 和 todo.save()，前者是操作整份資料，後者是針對單一資料。
+  // 「新增資料」時兩種作法都可以，而這次因為搭配的資料操作是 Todo.findById，這個方法只會返回一筆資料，所以後面需要接 todo.save() 針對這一筆資料進行儲存
+  return Todo.findById(id)
+    .then((todo) => {
+      todo.name = name
+      return todo.save()
+    })
+    .then(() => { res.redirect(`/todos/${id}`) })
     .catch((error) => { console.error(error) })
 })
 
