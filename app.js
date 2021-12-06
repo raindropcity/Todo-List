@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
   Todo.find().lean().then((todos) => {
     res.render('index', { todos: todos })
   })
-    .catch((error) => { console.error(error) })
+    .catch((error) => { console.log(error) })
 })
 
 app.get('/todos/new', (req, res) => {
@@ -55,7 +55,7 @@ app.post('/todos', (req, res) => {
   // create()：直接呼叫Todo物件新增資料
   return Todo.create({ name })
     .then(() => { res.redirect('/') })
-    .catch((error) => console.error(error))
+    .catch((error) => console.log(error))
 
   // 另一種寫法：另外設定一個變數存放新增資料的實體，然後用save()將新增的資料存入資料庫
   // const todo = new Todo({ name })
@@ -72,7 +72,7 @@ app.get('/todos/:id', (req, res) => {
   return Todo.findById(id)
     .lean()
     .then((todo) => { res.render('detail', { todo: todo }) })
-    .catch((error) => { console.error(error) })
+    .catch((error) => { console.log(error) })
 })
 
 // 修改一筆特定資料
@@ -82,7 +82,7 @@ app.get('/todos/:id/edit', (req, res) => {
   return Todo.findById(id)
     .lean()
     .then((todo) => { res.render('edit', { todo: todo }) })
-    .catch((error) => { console.error(error) })
+    .catch((error) => { console.log(error) })
 })
 
 app.post('/todos/:id/edit', (req, res) => {
@@ -97,7 +97,16 @@ app.post('/todos/:id/edit', (req, res) => {
       return todo.save()
     })
     .then(() => { res.redirect(`/todos/${id}`) })
-    .catch((error) => { console.error(error) })
+    .catch((error) => { console.log(error) })
+})
+
+// 刪除一筆特定資料
+app.post('/todos/:id/delete', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id)
+    .then((todo) => { todo.remove() })
+    .then(() => { res.redirect('/') })
+    .catch((error) => { console.log(error) })
 })
 
 app.listen(port, () => {

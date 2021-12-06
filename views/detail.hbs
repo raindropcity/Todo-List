@@ -1,4 +1,7 @@
 {{!-- 因為只需要顯示「字串」就好，因此用雙大括號就OK --}}
 <p>{{todo.name}}</p>
-<a href="./todos/{{ todo._id }}/edit">Edit</a>
+<a href="/todos/{{ todo._id }}/edit">Edit</a>
 <a href="/">Back</a>
+<form action="/todos/{{ todo._id }}/delete" method="POST" style="display: inline;">
+  <button type="submit">Delete</button>
+</form>

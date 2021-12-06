@@ -8,5 +8,9 @@
   --}}
   <a href="./todos/{{ this._id }}">Detail</a>
   <a href="./todos/{{ this._id }}/edit">Edit</a>
-  {{/each}}
+  {{!-- Delete用<form>是因為想用POST方法，<form>的method屬性可以指定用POST --}}
+      <form action="./todos/{{ this._id }}/delete" method="POST" style="display: inline;">
+        <button type="submit">Delete</button>
+      </form>
+      {{/each}}
 </ul>
