@@ -1,0 +1,5 @@
+{{!-- 用 action 屬性來定義表單資料發送的位置，這代表app.js需要再新增一條 POST /todos 路由來接住這筆表單資料。 --}}
+<form action="/todos" method="POST">
+  <input type="text" name="name" placeholder="name">
+  <button type="submit">Create</button>
+</form>

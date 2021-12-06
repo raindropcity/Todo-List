@@ -1,12 +1,13 @@
 const express = require('express')
 const app = express()
-const exphbs = require('express-handlebars')
-const mongoose = require('mongoose')
-// 取得資料庫連線狀態
-const db = mongoose.connection
+
 const port = 3000
 
 const Todo = require('./models/todo')
+
+const mongoose = require('mongoose')
+// 取得資料庫連線狀態
+const db = mongoose.connection
 
 mongoose.connect('mongodb://localhost/todo_list', { useNewUrlParser: true, useUnifiedTopology: true })
 
@@ -22,10 +23,14 @@ db.once('open', () => {
   console.log('mongodb connected')
 })
 
+const exphbs = require('express-handlebars')
 // 建立一個名為hbs的樣板引擎，並傳入exphbs的相關參數
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 // 啟用樣板引擎hbs
 app.set('view engine', 'hbs')
+
+// 使用body-parser所提供的解析URL方法(body-parser已內建於Express中)，見password generator專案中有解釋。use()代表任何request都要先經過這邊
+app.use(express.urlencoded({ extended: true }))
 
 app.get('/', (req, res) => {
   // find()：取出 Todo model 裡的所有資料，現在沒有傳入任何參數，所以會撈出整份資料。
@@ -36,6 +41,27 @@ app.get('/', (req, res) => {
     res.render('index', { todos: todos })
   })
     .catch((error) => { console.error(error) })
+})
+
+app.get('/todos/new', (req, res) => {
+  // 叫 view 引擎去拿 new 樣板
+  res.render('new')
+})
+
+app.post('/todos', (req, res) => {
+  const name = req.body.name // 從 req.body拿出表單裡的name資料(關於req.body見password generator專案中有解釋)
+
+  // create()：直接呼叫Todo物件新增資料
+  Todo.create({ name })
+    .then(() => { res.redirect('/') })
+    .catch((error) => console.error(EvalError))
+
+  // 另一種寫法：另外設定一個變數存放新增資料的實體，然後用save()將新增的資料存入資料庫
+  // const todo = new Todo({ name })
+  // // save()：存入資料庫
+  // todo.save()
+  //   .then(() => { res.redirect('/') }) // 資料新增完成後導回首頁
+  //   .catch((error) => { console.error(error) })
 })
 
 app.listen(port, () => {
