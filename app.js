@@ -71,6 +71,7 @@ app.get('/todos/:id', (req, res) => {
   // findById()：以id去資料庫尋找某特定資料
   return Todo.findById(id)
     .lean()
+    .sort({ _id: 'asc' }) //sort()是排序，asc為正序；desc為反序。這邊是使用「_id」值來作為排序依據。
     .then((todo) => { res.render('detail', { todo: todo }) })
     .catch((error) => { console.log(error) })
 })
