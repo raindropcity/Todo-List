@@ -32,6 +32,12 @@ app.set('view engine', 'hbs')
 // 使用body-parser所提供的解析URL方法(body-parser已內建於Express中)，見password generator專案中有解釋。use()代表任何request都要先經過這邊
 app.use(express.urlencoded({ extended: true }))
 
+// 引用method-override套件，它是Express的中介軟體，中介軟體是在request傳進來時進行處理流程，再接續到response的套件(例如body-parser也是中介軟體)。
+// 由於HTML中的<form>的method屬性只有GET或POST，無法使用RESTful風格的路由設計方式，因此使用method-override將應使用PUT、DELETE等HTTP動詞的路由，從GET或POST覆蓋為PUT或DELETE等原生HTML元素不支援的動詞。
+const methodOverride = require('method-override')
+// _method是method-override的一個參數。用途是在HTML元素中的路由設定裡加入「?_method=DELETE」(見index.hbs頁面中DELETE按鈕的<form>的action設定)，method-override會幫我們將「?_method」後面的內容(這邊是以DELETE為例)轉換成controller頁(就是app.js)所設定的HTTP方法(以app.delete()為例)。
+app.use(methodOverride('_method'))
+
 app.get('/', (req, res) => {
   // find()：取出 Todo model 裡的所有資料，現在沒有傳入任何參數，所以會撈出整份資料。
   // lean()：把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列，這裡可以記一個口訣：「撈資料以後想用 res.render()，要先用 .lean() 來處理」。
@@ -71,7 +77,7 @@ app.get('/todos/:id', (req, res) => {
   // findById()：以id去資料庫尋找某特定資料
   return Todo.findById(id)
     .lean()
-    .sort({ _id: 'asc' }) //sort()是排序，asc為正序；desc為反序。這邊是使用「_id」值來作為排序依據。
+    .sort({ _id: 'asc' }) //sort()是排序，asc為正序；desc為反序。這邊是使用「_id」值來作為排序依據，也就是先入資料庫者在越前面。
     .then((todo) => { res.render('detail', { todo: todo }) })
     .catch((error) => { console.log(error) })
 })
@@ -86,7 +92,7 @@ app.get('/todos/:id/edit', (req, res) => {
     .catch((error) => { console.log(error) })
 })
 
-app.post('/todos/:id/edit', (req, res) => {
+app.put('/todos/:id', (req, res) => {
   const id = req.params.id
   // const name = req.body.name
   // const isDone = req.body.isDone
@@ -113,7 +119,7 @@ app.post('/todos/:id/edit', (req, res) => {
 })
 
 // 刪除一筆特定資料
-app.post('/todos/:id/delete', (req, res) => {
+app.delete('/todos/:id', (req, res) => {
   const id = req.params.id
   // 呼叫了兩次資料操作方法(remove()與redirect())，因此有兩段 .then()
   return Todo.findById(id)
