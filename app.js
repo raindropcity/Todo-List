@@ -5,6 +5,9 @@ const port = 3000
 
 const Todo = require('./models/todo')
 
+// 引入路由器時，路徑設定為 /routes 就會自動去尋找目錄下叫做 index 的檔案。
+const routes = require('./routes')
+
 const mongoose = require('mongoose')
 // 取得資料庫連線狀態
 const db = mongoose.connection
@@ -38,95 +41,8 @@ const methodOverride = require('method-override')
 // _method是method-override的一個參數。用途是在HTML元素中的路由設定裡加入「?_method=DELETE」(見index.hbs頁面中DELETE按鈕的<form>的action設定)，method-override會幫我們將「?_method」後面的內容(這邊是以DELETE為例)轉換成controller頁(就是app.js)所設定的HTTP方法(以app.delete()為例)。
 app.use(methodOverride('_method'))
 
-app.get('/', (req, res) => {
-  // find()：取出 Todo model 裡的所有資料，現在沒有傳入任何參數，所以會撈出整份資料。
-  // lean()：把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列，這裡可以記一個口訣：「撈資料以後想用 res.render()，要先用 .lean() 來處理」。
-  // .then() 這一步資料會被放進 todos 變數
-  // catch()：如果有錯誤的話先把錯誤內容印出來
-  Todo.find().lean().then((todos) => {
-    res.render('index', { todos: todos })
-  })
-    .catch((error) => { console.log(error) })
-})
-
-app.get('/todos/new', (req, res) => {
-  // 叫 view 引擎去拿 new 樣板
-  res.render('new')
-})
-
-// 新增一筆資料
-app.post('/todos', (req, res) => {
-  const name = req.body.name // 從 req.body拿出表單裡的name資料(關於req.body見password generator專案中有解釋)
-
-  // create()：直接呼叫Todo物件新增資料
-  return Todo.create({ name })
-    .then(() => { res.redirect('/') })
-    .catch((error) => console.log(error))
-
-  // 另一種寫法：另外設定一個變數存放新增資料的實體，然後用save()將新增的資料存入資料庫
-  // const todo = new Todo({ name })
-  // // save()：存入資料庫
-  // todo.save()
-  //   .then(() => { res.redirect('/') }) // 資料新增完成後導回首頁
-  //   .catch((error) => { console.error(error) })
-})
-
-// 瀏覽一筆特定資料，見筆記「動態路由」
-app.get('/todos/:id', (req, res) => {
-  const id = req.params.id
-  // findById()：以id去資料庫尋找某特定資料
-  return Todo.findById(id)
-    .lean()
-    .sort({ _id: 'asc' }) //sort()是排序，asc為正序；desc為反序。這邊是使用「_id」值來作為排序依據，也就是先入資料庫者在越前面。
-    .then((todo) => { res.render('detail', { todo: todo }) })
-    .catch((error) => { console.log(error) })
-})
-
-// 修改一筆特定資料
-app.get('/todos/:id/edit', (req, res) => {
-  const id = req.params.id
-  // findById()：以id去資料庫尋找某特定資料
-  return Todo.findById(id)
-    .lean()
-    .then((todo) => { res.render('edit', { todo: todo }) })
-    .catch((error) => { console.log(error) })
-})
-
-app.put('/todos/:id', (req, res) => {
-  const id = req.params.id
-  // const name = req.body.name
-  // const isDone = req.body.isDone
-  // 解構賦值，將上面二行的name與isDone變數設定，縮寫成如下這樣。理解方式在於「想要把"req.body物件"裡的屬性一項項拿出來存成變數」。
-  const { name, isDone } = req.body
-
-  // 在「新增資料」時，比較過 Todo.create() 和 todo.save()，前者是操作整份資料，後者是針對單一資料。
-  // 「新增資料」時兩種作法都可以，而這次因為搭配的資料操作是 Todo.findById，這個方法只會返回一筆資料，所以後面需要接 todo.save() 針對這一筆資料進行儲存
-  // 呼叫了兩次資料操作方法(save()與redirect())，因此有兩段 .then()
-  return Todo.findById(id)
-    .then((todo) => {
-      // 用來判斷checkbox有沒有被勾選的條件式，可以優化成這樣。因為(isDone === 'on')的結果就是true或false(使用者有勾選，判斷出來就是true；反之沒勾選，判斷出來就是false)，而資料庫中儲存的isDone欄位本身就是要填布林值，所以剛好直接重新賦值給todo.isDone，就不用寫下面的if/else條件式來判斷todo.isDone應該重新賦值成true還是false了。
-      todo.isDone = (isDone === 'on')
-      // if (isDone === 'on') {
-      //   todo.isDone = true
-      // } else {
-      //   todo.isDone = false
-      // }
-      todo.name = name
-      return todo.save()
-    })
-    .then(() => { res.redirect(`/todos/${id}`) })
-    .catch((error) => { console.log(error) })
-})
-
-// 刪除一筆特定資料
-app.delete('/todos/:id', (req, res) => {
-  const id = req.params.id
-  // 呼叫了兩次資料操作方法(remove()與redirect())，因此有兩段 .then()
-  return Todo.findById(id)
-    .then((todo) => { todo.remove() })
-    .then(() => { res.redirect('/') })
-    .catch((error) => { console.log(error) })
-})
+// routes是上面設定的變數，用來存放「總路由(/routes/index.js)」
+app.use(routes)
 
 app.listen(port, () => {
   console.log(`App is running on http://localhost:${port}`)
