@@ -2,15 +2,21 @@
 
 <ul>
   {{#each todos}}
-  <li>{{this.name}}</li>
-  {{!--
-  「_id」底線id是MongoDB自動為每一筆資料生成的唯一值，因此，雖然沒有在todo.js那個檔案中的Schema設定每一筆資料中應有id值，但_id是內建的，可以開Robo3T去看資料庫中每筆資料的_id值是多少(蠻長的，例如：5e9460ebe0174f4a734ce12a)。之後點擊Detail按鈕後，網址會變這樣：/todos/5e9460ebe0174f4a734ce12a。這是GET的特性。
-  --}}
-  <a href="./todos/{{ this._id }}">Detail</a>
-  <a href="./todos/{{ this._id }}/edit">Edit</a>
-  {{!-- Delete用<form>是因為想用POST方法，<form>的method屬性可以指定用POST --}}
-      <form action="./todos/{{ this._id }}/delete" method="POST" style="display: inline;">
-        <button type="submit">Delete</button>
-      </form>
-      {{/each}}
+  <li>
+    <!-- 這邊是首頁要呈現的地方沒有要讓使用者可以直接勾選是否完成。因此加上disabled屬性，讓checkbox只能看不能勾選 -->
+    <input type="checkbox" name="isDone" {{#if this.isDone}} checked {{/if}} disabled>
+    {{this.name}}
+    <a href="./todos/{{ this._id }}">Detail</a>
+    <a href="./todos/{{ this._id }}/edit">Edit</a>
+    <form action="./todos/{{ this._id }}/delete" method="POST" style="display: inline;">
+      <button type="submit">Delete</button>
+    </form>
+  </li>
+  {{/each}}
 </ul>
+
+{{!--
+「_id」底線id是MongoDB自動為每一筆資料生成的唯一值，因此，雖然沒有在todo.js那個檔案中的Schema設定每一筆資料中應有id值，但_id是內建的，可以開Robo3T去看資料庫中每筆資料的_id值是多少(蠻長的，例如：5e9460ebe0174f4a734ce12a)。之後點擊Detail按鈕後，網址會變這樣：/todos/5e9460ebe0174f4a734ce12a。這是GET的特性。
+--}}
+
+{{!-- Delete用<form>是因為想用POST方法，<form>的method屬性可以指定用POST --}}

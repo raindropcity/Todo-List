@@ -87,12 +87,23 @@ app.get('/todos/:id/edit', (req, res) => {
 
 app.post('/todos/:id/edit', (req, res) => {
   const id = req.params.id
-  const name = req.body.name
+  // const name = req.body.name
+  // const isDone = req.body.isDone
+  // 解構賦值，將上面二行的name與isDone變數設定，縮寫成如下這樣。理解方式在於「想要把"req.body物件"裡的屬性一項項拿出來存成變數」。
+  const { name, isDone } = req.body
 
   // 在「新增資料」時，比較過 Todo.create() 和 todo.save()，前者是操作整份資料，後者是針對單一資料。
   // 「新增資料」時兩種作法都可以，而這次因為搭配的資料操作是 Todo.findById，這個方法只會返回一筆資料，所以後面需要接 todo.save() 針對這一筆資料進行儲存
+  // 呼叫了兩次資料操作方法(save()與redirect())，因此有兩段 .then()
   return Todo.findById(id)
     .then((todo) => {
+      // 用來判斷checkbox有沒有被勾選的條件式，可以優化成這樣。因為(isDone === 'on')的結果就是true或false(使用者有勾選，判斷出來就是true；反之沒勾選，判斷出來就是false)，而資料庫中儲存的isDone欄位本身就是要填布林值，所以剛好直接重新賦值給todo.isDone，就不用寫下面的if/else條件式來判斷todo.isDone應該重新賦值成true還是false了。
+      todo.isDone = (isDone === 'on')
+      // if (isDone === 'on') {
+      //   todo.isDone = true
+      // } else {
+      //   todo.isDone = false
+      // }
       todo.name = name
       return todo.save()
     })
@@ -103,6 +114,7 @@ app.post('/todos/:id/edit', (req, res) => {
 // 刪除一筆特定資料
 app.post('/todos/:id/delete', (req, res) => {
   const id = req.params.id
+  // 呼叫了兩次資料操作方法(remove()與redirect())，因此有兩段 .then()
   return Todo.findById(id)
     .then((todo) => { todo.remove() })
     .then(() => { res.redirect('/') })
