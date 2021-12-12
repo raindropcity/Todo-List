@@ -5,8 +5,10 @@
 const mongoose = require('mongoose')
 // 取得資料庫連線狀態
 const db = mongoose.connection
-// 這邊路徑代表在主機建立一個名為「todo_list」的database。因此去Robo 3T 中看資料庫時，會看到有個叫todo_list的database。
-mongoose.connect('mongodb://localhost/todo_list', { useNewUrlParser: true, useUnifiedTopology: true })
+// 這邊路徑代表透過環境參數process.env.MONGODB_URI取用Heroku中所設定的MONGODB_URI，若沒有拿到，則在主機建立一個名為「todo_list」的database。因此去Robo 3T 中看資料庫時，會看到有個叫todo_list的database。
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/todo_list'
+
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // 資料庫連線異常
 // db.on()：在這裡用 on 註冊一個事件監聽器，用來監聽 error 事件有沒有發生。
