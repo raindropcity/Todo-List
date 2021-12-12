@@ -1,11 +1,11 @@
-<p>
-  <input type="checkbox" name="isDone" {{#if todo.isDone}} checked {{/if}} disabled>
-  <!-- 因為只需要顯示「字串」就好，因此用雙大括號就OK -->
-  {{todo.name}}
-</p>
-<!-- 路徑用 / 開頭，表示「從根目錄開始」，若用 ./ 代表「從同一層資料夾開始」 -->
-<a href="/todos/{{ todo._id }}/edit">Edit</a>
-<a href="/">Back</a>
 <form action="/todos/{{ todo._id }}?_method=DELETE" method="POST" style="display: inline;">
-  <button type="submit">Delete</button>
+  <div class="input-group">
+    <div class="input-group-text">
+      <input type="checkbox" class="form-check-input mt-0" name="isDone" {{#if todo.isDone }} checked {{/if}} disabled>
+    </div>
+    <input class="form-control" type="text" placeholder="name" name="name" value="{{ todo.name }}" disabled>
+    <!-- 路徑用 / 開頭，表示「從根目錄開始」，若用 ./ 代表「從同一層資料夾開始」 -->
+    <a class="btn btn-success" href="/todos/{{ todo._id }}/edit">edit</a>
+    <button class="btn btn-danger" type="submit">delete</button>
+  </div>
 </form>
