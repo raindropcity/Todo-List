@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 
 // routes是上面設定的變數，用來存放「總路由(/routes/index.js)」。而總路由用來整合各種頁面、功能所需的路由分支。
-// 例如「首頁」路由設定於/routes/modules/home.js中；「CRUD」路由設定於/routes/modules/todos中。之後一併匯總到總路由/routes/index.js，於此(app.js)引用之。
+// 例如「首頁」路由設定於/routes/modules/home.js中；「CRUD」路由設定於/routes/modules/CRUD.js中。之後一併匯總到總路由/routes/index.js，於此(app.js)引用之。
 app.use(routes)
 
 app.listen(PORT, () => {

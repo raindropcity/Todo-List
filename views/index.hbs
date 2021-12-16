@@ -1,12 +1,12 @@
 <ul class="list-group">
   {{#each todos}}
-  <li class="list-group-item">
+  <li class="list-group-item bg-dark">
     <div class="row">
       <div class="col-auto me-auto">
         <!-- 這邊是首頁要呈現的地方沒有要讓使用者可以直接勾選是否完成。因此加上disabled屬性，讓checkbox只能看不能勾選 -->
-        <input style="vertical-align: middle;" type="checkbox" name="isDone" {{#if this.isDone}} checked {{/if}}
-          disabled>
-        <h4 style="display: inline; vertical-align: middle;">{{this.name}}</h4>
+        <input style="vertical-align: middle; width: 20px; height: 20px;" type="checkbox" name="isDone" {{#if this.isDone}} checked
+          {{/if}} disabled>
+        <h4 class="ms-2" style="display: inline; vertical-align: middle;">{{this.name}}</h4>
       </div>
       <div class="col-auto">
         <a class="btn btn-secondary" href="./todos/{{ this._id }}">Detail</a>
