@@ -1,7 +1,7 @@
 // 建立種子資料：準備一些基本資料，這種預先配置好的資料稱為「種子資料(seed data)」。
 // 因此這個檔案叫做todoSeeder.js
 
-// 原本的寫法。後續將Mongoose連線設定獨立出來寫在/config/mongoose.js中，因此這邊有很多程式碼可以省略。見下面。
+// 這邊是原本的寫法。 因為後續將Mongoose連線設定獨立出來寫在/config/mongoose.js中，因此這邊有很多程式碼可以省略。見下面。
 // const mongoose = require('mongoose')
 // const db = mongoose.connection
 // const Todo = require('../todo')
