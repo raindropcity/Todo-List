@@ -4,6 +4,15 @@ const exphbs = require('express-handlebars')
 // 由於HTML中的<form>的method屬性只有GET或POST，無法使用RESTful風格的路由設計方式，因此使用method-override將應使用PUT、DELETE等HTTP動詞的路由，從GET或POST覆蓋為PUT或DELETE等原生HTML元素不支援的動詞。
 const methodOverride = require('method-override')
 
+// 載入一些Login功能會用到的module 
+const session = require('express-session')
+const passport = require('passport')
+const expressValidator = require('express-validator')
+const localStrategy = require('passport-local').Strategy
+const multer = require('multer')
+const upload = multer({dest: './uploads'}) //setup multer upload destination
+const flash = require('connect-flash')
+
 // 定義連接埠號。Heroku 會把 port 的埠號放在環境參數 process.env.PORT 裡。
 const PORT = process.env.PORT || 3000
 
