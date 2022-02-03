@@ -6,19 +6,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Todo List</title>
-  <!-- 原生Boostrap提供的CSS樣式表：
+  {{!-- 原生Boostrap提供的CSS樣式表： --}}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
   <!-- 也可以使用Boostwatch的開源樣式表，有很多高手針對原生Boostrap CSS修改的切版主題(記得將integrity屬性拿掉) -->
-  <link href="https://bootswatch.com/5/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  {{!-- <link href="https://bootswatch.com/5/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous"> --}}
 </head>
 
 <body class="bg-light">
   <header>
-    <nav class="navbar navbar-dark bg-dark justify-content-between" style="padding: 8px 16px;">
-      <a class="navbar-brand ms-4" href="/" style="color: white; font-size: larger;">Todo List</a>
-      <a class="btn btn-warning me-4" href="/todos/new" style="color: black;">Create</a>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(191, 200, 204);">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">Todo List</a>
+        <div class="collapse navbar-collapse d-flex flex-row-reverse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="/todos/login">Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </nav>
   </header>
   <main>
