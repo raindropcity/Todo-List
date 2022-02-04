@@ -8,7 +8,7 @@ const home = require('./modules/home')
 // 引用/routes/modules/todos.js中所設定的「CRUD」路由
 const todos = require('./modules/todos')
 
-router.use('/', home)
+router.use('/todos', home)
 
 // 這邊設定的「/todos」叫做前綴詞，在引用/routes/modules/todos.js時，會將此「/todos」串在各個CRUD的路由前面。
 // 例如Create功能在todos.js中設定的路由是「/new」，實際上點下去URL會變成「/todos/new」
