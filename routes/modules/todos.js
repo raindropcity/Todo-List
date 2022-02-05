@@ -5,7 +5,15 @@ const express = require('express')
 const router = express.Router()
 // 引用「上一層的上一層的models資料夾中的todo.js檔案」
 const Todo = require('../../models/todo')
+const User = require('../../models/user')
 
+router.get('/login', (req, res) => {
+  res.render('login')
+})
+
+router.get('/register', (req, res) => {
+  res.render('register')
+})
 
 router.get('/new', (req, res) => {
   // 叫 view 引擎去拿 new 樣板

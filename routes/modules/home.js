@@ -5,12 +5,6 @@ const express = require('express')
 const router = express.Router()
 // 引用「上一層的上一層的models資料夾中的todo.js檔案」
 const Todo = require('../../models/todo')
-const User = require('../../models/user')
-
-router.get('/login', (req, res) => {
-  const users = User.find()
-  res.render('index', { users: users })
-})
 
 router.get('/', (req, res) => {
   // find()：取出 Todo model 裡的所有資料，現在沒有傳入任何參數，所以會撈出整份資料。
