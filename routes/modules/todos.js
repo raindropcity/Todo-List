@@ -15,6 +15,11 @@ router.get('/register', (req, res) => {
   res.render('register')
 })
 
+router.post('/register', (req, res) => {
+  const { email, password, userName, comfirmPassword } = req.body
+  
+})
+
 router.get('/new', (req, res) => {
   // 叫 view 引擎去拿 new 樣板
   res.render('new')
