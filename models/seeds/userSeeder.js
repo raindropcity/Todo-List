@@ -5,8 +5,8 @@ db.once('open', () => {
   User.create({
     email: 'raindropcity0209@gmail.com',
     password: 'raindrop0209',
-    firstName: 'Ray',
-    secondName: 'Fang'
+    userName: 'Ray',
+    comfirmPassword: 'raindrop0209'
   })
 
   console.log('done.')

@@ -10,11 +10,11 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  firstName: {
+  userName: {
     type: String,
     required: true
   },
-  secondName: {
+  comfirmPassword: {
     type: String,
     required: true
   }
