@@ -1,22 +1,41 @@
 <div
   style="text-align: center; z-index: 2; border-radius: 5px; background-color: rgba(255, 255, 255, 0.5); width: 35%;">
   <h2 style="margin-top: 10px;">Register</h2>
-  <form action="/register" method="post" style="padding-right: 8px; padding-left: 8px;">
-    <label for="username" style="border-radius: 5px; width: 100%; margin-top: 8px;">
-      <input id="username" type="text" placeholder="Username" name="username" style="width: 100%; padding-left: 5px;"
-        max="12">
+  <form action="/todos/register" method="POST" style="padding-right: 8px; padding-left: 8px;">
+    <label for="userName" style="position: relative; width: 100%; border-radius: 5px; margin-top: 8px;">
+      <i class="fas fa-user-edit" style="position: absolute; top: 25%; left: 7px; color: rgb(134, 134, 134);"></i>
+      <input id="userName" type="text" placeholder="Username" name="userName"
+        style="width: 100%; padding-left: 5px; text-indent: 23px;" max="12" value="{{inputedContent.userName}}">
     </label>
-    <label for="email" style="border-radius: 5px; width: 100%; margin-top: 8px;">
-      <input id="email" type="email" placeholder="Email" name="email" style="width: 100%; padding-left: 5px;">
+    {{#if warning}}
+    <p style="color: crimson; text-align: start; font-weight: bold; margin-bottom: -3px;">{{warning.userName}}</p>
+    {{/if}}
+    <label for="email" style="position: relative; width: 100%; border-radius: 5px; margin-top: 8px;">
+      <i class="fas fa-envelope" style="position: absolute; top: 25%; left: 7px; color: rgb(134, 134, 134);"></i>
+      <input id="email" type="email" placeholder="Email" name="email"
+        style="width: 100%; padding-left: 5px; text-indent: 23px;" value="{{inputedContent.email}}">
     </label>
-    <label for="password" style="border-radius: 5px; width: 100%; margin-top: 8px;">
+    {{#if warning}}
+    <p style="color: crimson; text-align: start; font-weight: bold; margin-bottom: -3px;">{{warning.email}}</p>
+    {{/if}}
+    <label for="password" style="position: relative; width: 100%; border-radius: 5px; margin-top: 8px;">
+      <i class="fas fa-lock" style="position: absolute; top: 25%; left: 7px; color: rgb(134, 134, 134);"></i>
       <input id="password" type="password" placeholder="password" name="password"
-        style="width: 100%; padding-left: 5px;" min="8" max="12">
+        style="width: 100%; padding-left: 5px; text-indent: 23px;" min="8" max="12" value="{{inputedContent.password}}">
     </label>
-    <label for="comfirmPassword" style="border-radius: 5px; width: 100%; margin-top: 8px;">
-      <input id="comfirmPassword" type="password" placeholder="Comfirm Password" name="comfirmPassword"
-        style="width: 100%; padding-left: 5px;" min="8" max="12">
+    {{#if warning}}
+    <p style="color: crimson; text-align: start; font-weight: bold; margin-bottom: -3px;">{{warning.password}}</p>
+    {{/if}}
+    <label for="confirmPassword" style="position: relative; width: 100%; border-radius: 5px; margin-top: 8px;">
+      <i class="fas fa-lock" style="position: absolute; top: 25%; left: 7px; color: rgb(134, 134, 134);"></i>
+      <input id="confirmPassword" type="password" placeholder="Confirm Password" name="confirmPassword"
+        style="width: 100%; padding-left: 5px; text-indent: 23px;" min="8" max="12"
+        value="{{inputedContent.confirmPassword}}">
     </label>
+    {{#if warning}}
+    <p style="color: crimson; text-align: start; font-weight: bold; margin-bottom: -3px;">{{warning.confirmPassword}}
+    </p>
+    {{/if}}
     <div style="text-align: center; margin-top: 8px;">
       <button class="btn btn-secondary" type="submit" style="width: 100%;">Register</button>
     </div>

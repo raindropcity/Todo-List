@@ -6,7 +6,7 @@ db.once('open', () => {
     email: 'raindropcity0209@gmail.com',
     password: 'raindrop0209',
     userName: 'Ray',
-    comfirmPassword: 'raindrop0209'
+    confirmPassword: 'raindrop0209'
   })
 
   console.log('done.')

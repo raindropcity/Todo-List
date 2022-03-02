@@ -6,6 +6,8 @@ const router = express.Router()
 // 引用「上一層的上一層的models資料夾中的todo.js檔案」
 const Todo = require('../../models/todo')
 const User = require('../../models/user')
+// 引用express-validator，用於確認註冊表單中使用者輸入的內容合法性(使用解構賦值進行變數設定)
+const { check, validationResult, matchedData, Result } = require('express-validator')
 
 router.get('/login', (req, res) => {
   res.render('login')
@@ -15,10 +17,65 @@ router.get('/register', (req, res) => {
   res.render('register')
 })
 
-router.post('/register', (req, res) => {
-  const { email, password, userName, comfirmPassword } = req.body
-  
-})
+router.post('/register',
+  // check username
+  check('userName').trim().notEmpty().withMessage('This field is required!').bail()
+    .isAlphanumeric().withMessage('En alphabet or numeric only!').bail()
+    .isLength({ min: 2, max: 12 }).withMessage('Username length must within 2 to 12!').bail()
+    .custom(async (value) => {
+      const existOrNot = await User.findOne({ userName: value })
+      if (existOrNot) { throw new Error('This user name has already been used!') }
+      return true
+    }),
+  // check email
+  check('email').trim().notEmpty().withMessage('This field is required!').bail()
+    .isEmail().withMessage('Invalid email address!').bail()
+    .custom(async (value) => {
+      const existOrNot = await User.findOne({ email: value })
+      //throw出來的訊息會進到下方validationResult(req)專門放error的陣列中
+      if (existOrNot) { throw new Error('This email address has already been registered!') }
+      return true
+    }),
+  // check password
+  check('password').trim().notEmpty().withMessage('This field is required!').bail()
+    .isAlphanumeric().withMessage('En alphabet or numeric only!').bail()
+    .isLength({ min: 8, max: 12 }).withMessage('Password length must within 8 to 12!'),
+  // check confirm password
+  check('confirmPassword').trim().notEmpty().withMessage('This field is required!').bail()
+    .isAlphanumeric().withMessage('En alphabet or numeric only!').bail()
+    .isLength({ min: 8, max: 12 }).withMessage('Password length must within 8 to 12!').bail()
+    .custom((value, { req }) => {
+      if (value !== req.body.password) { throw new Error('Password is different from Confirm Password!') }
+      return true
+    }),
+  (req, res) => {
+    const { email, password, userName, confirmPassword } = req.body
+    const errorOfValidation = validationResult(req)
+
+    if (!errorOfValidation.isEmpty()) {
+      console.log(errorOfValidation.array())
+      const invalidWarnObj = {}
+      errorOfValidation.array().forEach((value) => {
+        invalidWarnObj[`${value.param}`] = value.msg //使用Object的括弧記法將errorOfValidation.array()中的param與msg提取出來，裝進新的物件中
+      })
+      console.log(invalidWarnObj)
+      return res.status(422).render('register', {
+        inputedContent: { email, password, userName, confirmPassword }, //於頁面保留使用者前次輸入的內容
+        warning: invalidWarnObj //render出各欄位的「無效原因」
+      })
+    }
+
+    User.create({
+      email: email,
+      password: password,
+      userName: userName,
+      confirmPassword: confirmPassword
+    })
+      .then(() => {
+        return res.redirect('/todos')
+      })
+      .catch((err) => { console.log(err) })
+  })
 
 router.get('/new', (req, res) => {
   // 叫 view 引擎去拿 new 樣板
