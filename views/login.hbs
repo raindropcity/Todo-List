@@ -2,12 +2,15 @@
   style="text-align: center; z-index: 2; border-radius: 5px; background-color: rgba(255, 255, 255, 0.5); width: 35%;">
   <h2 style="margin-top: 10px;">Login</h2>
   <form action="#" method="POST" style="padding-right: 8px; padding-left: 8px;">
-    <label for="email" style="border-radius: 5px; width: 100%; margin-top: 8px;">
-      <input id="email" type="email" placeholder="Email" name="email" style="width: 100%; padding-left: 5px;">
+    <label for="email" style="position: relative; width: 100%; border-radius: 5px; margin-top: 8px;">
+      <i class="fas fa-envelope" style="position: absolute; top: 25%; left: 7px; color: rgb(134, 134, 134);"></i>
+      <input id="email" type="email" placeholder="Email" name="email"
+        style="width: 100%; padding-left: 5px; text-indent: 23px;">
     </label>
-    <label for="password" style="border-radius: 5px; width: 100%; margin-top: 8px;">
+    <label for="password" style="position: relative; width: 100%; border-radius: 5px; margin-top: 8px;">
+      <i class="fas fa-lock" style="position: absolute; top: 25%; left: 7px; color: rgb(134, 134, 134);"></i>
       <input id="password" type="password" placeholder="password" name="password"
-        style="width: 100%; padding-left: 5px;">
+        style="width: 100%; padding-left: 5px; text-indent: 23px;">
     </label>
     <div style="text-align: center; margin-top: 8px;">
       <button class="btn btn-secondary" type="submit" style="width: 100%;">Login</button>
