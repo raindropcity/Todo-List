@@ -88,7 +88,7 @@ router.post('/', (req, res) => {
 
   // create()：直接呼叫Todo物件新增資料
   return Todo.create({ name })
-    .then(() => { res.redirect('/') })
+    .then(() => { res.redirect('/todos') })
     .catch((error) => console.log(error))
 
   // 另一種寫法：另外設定一個變數存放新增資料的實體，然後用save()將新增的資料存入資料庫
@@ -152,7 +152,7 @@ router.delete('/:id', (req, res) => {
   // 呼叫了兩次資料操作方法(remove()與redirect())，因此有兩段 .then()
   return Todo.findById(id)
     .then((todo) => { todo.remove() })
-    .then(() => { res.redirect('/') })
+    .then(() => { res.redirect('/todos') })
     .catch((error) => { console.log(error) })
 })
 

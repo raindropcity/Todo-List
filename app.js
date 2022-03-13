@@ -1,16 +1,11 @@
 const express = require('express')
+const app = express()
 const exphbs = require('express-handlebars')
 // 引用method-override套件，它是Express的中介軟體，中介軟體是在request傳進來時進行處理流程，再接續到response的套件(例如body-parser也是中介軟體)。
 // 由於HTML中的<form>的method屬性只有GET或POST，無法使用RESTful風格的路由設計方式，因此使用method-override將應使用PUT、DELETE等HTTP動詞的路由，從GET或POST覆蓋為PUT或DELETE等原生HTML元素不支援的動詞。
 const methodOverride = require('method-override')
 
 // 載入一些Login功能會用到的module 
-const session = require('express-session')
-const passport = require('passport')
-const expressValidator = require('express-validator')
-const localStrategy = require('passport-local').Strategy
-const multer = require('multer')
-const upload = multer({dest: './uploads'}) //setup multer upload destination
 const flash = require('connect-flash')
 
 // 定義連接埠號。Heroku 會把 port 的埠號放在環境參數 process.env.PORT 裡。
@@ -18,10 +13,12 @@ const PORT = process.env.PORT || 3000
 
 // 引用Mongoose連線設定。這邊沒有將require存入const中，是因為mongoose.js中所寫的module.exports匯出的東西是db，是要給todoSeeder.js使用的，且app.js裡後續也沒有要再用到此連線設定。因此這邊直接寫require('./config/mongoose')，代表在執行app.js時一併執行mongoose.js。
 require('./config/mongoose')
+
+// 引用passport功能(寫在./routes/modules/passport.js這支檔案中)
+require('./routes/modules/passport').exportPassport
+
 // 引入路由器時，路徑設定為 /routes 就會自動去尋找目錄下叫做 index 的檔案。
 const routes = require('./routes')
-
-const app = express()
 
 // 建立一個名為hbs的樣板引擎，並傳入exphbs的相關參數
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
