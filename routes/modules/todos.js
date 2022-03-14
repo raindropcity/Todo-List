@@ -79,7 +79,7 @@ router.post('/register',
 
 router.get('/new', (req, res) => {
   // 叫 view 引擎去拿 new 樣板
-  res.render('new')
+  return res.render('new')
 })
 
 // 新增一筆資料
