@@ -50,4 +50,15 @@ router.post('/login',
 module.exports = {
   router: router,
   exportPassport: passport,
+  // 此為「判斷是否已通過login的身分驗證」的middleware，提供給每個CRUD請求去引用，達成route protection的目的。
+  // 預防使用者在尚未登入的情況下能夠操作各項功能。
+  ensureAuthenticated: (req, res, next) => {
+    // isAuthenticated()是使用者login經過passport的驗證後，會在req物件中登記false或true，以表示是否通過驗證
+    if (!req.isAuthenticated()) {
+      req.flash('reminder', 'Please Login!')
+      return res.render('login', {authProtectFlash: req.flash('reminder')})
+    }
+    console.log('The middleware "ensureAuthenticated" is now executing!')
+    return next()
+  }
 }

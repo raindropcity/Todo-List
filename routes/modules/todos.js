@@ -8,6 +8,8 @@ const Todo = require('../../models/todo')
 const User = require('../../models/user')
 // 引用express-validator，用於確認註冊表單中使用者輸入的內容合法性(使用解構賦值進行變數設定)
 const { check, validationResult, matchedData, Result } = require('express-validator')
+// 引用ensureAuthenticated()用來進行route protection
+const ensureAuthenticated = require('./passport').ensureAuthenticated
 
 router.get('/login', (req, res) => {
   res.render('login')
@@ -77,13 +79,13 @@ router.post('/register',
       .catch((err) => { console.log(err) })
   })
 
-router.get('/new', (req, res) => {
+router.get('/new', ensureAuthenticated, (req, res) => {
   // 叫 view 引擎去拿 new 樣板
   return res.render('new')
 })
 
 // 新增一筆資料
-router.post('/', (req, res) => {
+router.post('/', ensureAuthenticated, (req, res) => {
   const name = req.body.name // 從 req.body拿出表單裡的name資料(關於req.body見password generator專案中有解釋)
 
   // create()：直接呼叫Todo物件新增資料
@@ -100,7 +102,7 @@ router.post('/', (req, res) => {
 })
 
 // 瀏覽一筆特定資料，見筆記「動態路由」
-router.get('/:id', (req, res) => {
+router.get('/:id', ensureAuthenticated, (req, res) => {
   const id = req.params.id
   // findById()：以id去資料庫尋找某特定資料
   return Todo.findById(id)
@@ -111,7 +113,7 @@ router.get('/:id', (req, res) => {
 })
 
 // 修改一筆特定資料
-router.get('/:id/edit', (req, res) => {
+router.get('/:id/edit', ensureAuthenticated, (req, res) => {
   const id = req.params.id
   // findById()：以id去資料庫尋找某特定資料
   return Todo.findById(id)
@@ -120,7 +122,7 @@ router.get('/:id/edit', (req, res) => {
     .catch((error) => { console.log(error) })
 })
 
-router.put('/:id', (req, res) => {
+router.put('/:id', ensureAuthenticated, (req, res) => {
   const id = req.params.id
   // const name = req.body.name
   // const isDone = req.body.isDone
@@ -147,7 +149,7 @@ router.put('/:id', (req, res) => {
 })
 
 // 刪除一筆特定資料
-router.delete('/:id', (req, res) => {
+router.delete('/:id', ensureAuthenticated, (req, res) => {
   const id = req.params.id
   // 呼叫了兩次資料操作方法(remove()與redirect())，因此有兩段 .then()
   return Todo.findById(id)
