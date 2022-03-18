@@ -11,12 +11,14 @@ const { check, validationResult, matchedData, Result } = require('express-valida
 // 引用ensureAuthenticated()用來進行route protection
 const ensureAuthenticated = require('./passport').ensureAuthenticated
 
+// 按下主畫面右上角LogOut按鈕，將登出並導向Login畫面
 router.get('/login', (req, res) => {
-  res.render('login')
+  if(req.isAuthenticated()) req.logout()
+  return res.render('login')
 })
 
 router.get('/register', (req, res) => {
-  res.render('register')
+  return res.render('register')
 })
 
 router.post('/register',

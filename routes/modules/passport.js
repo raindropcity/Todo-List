@@ -23,7 +23,10 @@ const strategy = new LocalStrategy(
 // 使用驗證策略
 passport.use(strategy)
 
-router.post('/login',
+router.post('/login', (req, res, next) => {
+  if (req.isAuthenticated()) { return }
+  else if (!req.isAuthenticated()) { return next() }
+},
   // 將passport.authenticate()寫在callback中，而不直接使用Passport內建以middleware形式的寫法。
   // 這樣可以在passport.authenticate()裡面使用res, req等參數
   (req, res, next) => {
@@ -56,7 +59,7 @@ module.exports = {
     // isAuthenticated()是使用者login經過passport的驗證後，會在req物件中登記false或true，以表示是否通過驗證
     if (!req.isAuthenticated()) {
       req.flash('reminder', 'Please Login!')
-      return res.render('login', {authProtectFlash: req.flash('reminder')})
+      return res.render('login', { authProtectFlash: req.flash('reminder')[0] })
     }
     console.log('The middleware "ensureAuthenticated" is now executing!')
     return next()
