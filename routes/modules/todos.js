@@ -13,7 +13,7 @@ const ensureAuthenticated = require('./passport').ensureAuthenticated
 
 // 按下主畫面右上角LogOut按鈕，將登出並導向Login畫面
 router.get('/login', (req, res) => {
-  if(req.isAuthenticated()) req.logout()
+  if (req.isAuthenticated()) req.logout()
   return res.render('login')
 })
 
@@ -88,10 +88,10 @@ router.get('/new', ensureAuthenticated, (req, res) => {
 
 // 新增一筆資料
 router.post('/', ensureAuthenticated, (req, res) => {
-  const name = req.body.name // 從 req.body拿出表單裡的name資料(關於req.body見password generator專案中有解釋)
+  const { agendas, content } = req.body // 從 req.body拿出表單裡的agendas資料(關於req.body見password generator專案中有解釋)
 
   // create()：直接呼叫Todo物件新增資料
-  return Todo.create({ name })
+  return Todo.create({ agendas, content })
     .then(() => { res.redirect('/todos') })
     .catch((error) => console.log(error))
 
@@ -129,7 +129,7 @@ router.put('/:id', ensureAuthenticated, (req, res) => {
   // const name = req.body.name
   // const isDone = req.body.isDone
   // 解構賦值，將上面二行的name與isDone變數設定，縮寫成如下這樣。理解方式在於「想要把"req.body物件"裡的屬性一項項拿出來存成變數」。
-  const { name, isDone } = req.body
+  const { agendas, content, isDone } = req.body
 
   // 在「新增資料」時，比較過 Todo.create() 和 todo.save()，前者是操作整份資料，後者是針對單一資料。
   // 「新增資料」時兩種作法都可以，而這次因為搭配的資料操作是 Todo.findById，這個方法只會返回一筆資料，所以後面需要接 todo.save() 針對這一筆資料進行儲存
@@ -143,7 +143,8 @@ router.put('/:id', ensureAuthenticated, (req, res) => {
       // } else {
       //   todo.isDone = false
       // }
-      todo.name = name
+      todo.agendas = agendas
+      todo.content = content
       return todo.save()
     })
     .then(() => { res.redirect(`/todos/${id}`) })

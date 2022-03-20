@@ -26,16 +26,17 @@
 
 // 引用/config/mongoose.js後的寫法
 // 在/config/mongoose.js中有寫好的東西，在這邊直接引用就行，不用再寫(跟上面對照，哪些程式碼省略、哪些不能省略)。
-// 因為todoSeeder.js是為了先建立一組種子資料存入資料庫，因此Mongoose連線成功的執行區域中有寫個for迴圈搭配create()來生成種子資料。也就是這部分跟/config/mongoose.js所寫內容不同，不可以省略。
+// 因為todoSeeder.js是為了先建立一組種子資料存入資料庫，因此Mongoose連線成功的執行區域中有寫個create()來生成種子資料。也就是這部分跟/config/mongoose.js所寫內容不同，不可以省略。
 const db = require('../../config/mongoose')
 const Todo = require('../todo')
 
 db.once('open', () => {
-  for (let i = 0; i < 10; i++) {
     // Todo.create() 是 Mongoose 提供的資料操作方法，之前我們建立了一個叫 Todo 的 model 物件(見todo.js的module.exports)。
     // 使用 Todo.create() 產生資料時，你需要告訴 Todo model 資料內容是什麼，這邊按照了之前在 Todo 的 schema 裡定義的規格。
-    Todo.create({ name: `name-${i}` })
-  }
+    Todo.create({
+      agendas: 'keep positive',
+      content: 'feeling pain, feeling upset, stay positive.'
+    })
 
   console.log('done.')
 })

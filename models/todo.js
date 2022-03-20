@@ -5,9 +5,12 @@ const Schema = mongoose.Schema
 // 確立資料的最小單位，也就是所謂「一筆資料」長的像下面的樣子。而在MongoDB中「一筆資料」叫做model
 // 確保每一筆 todo 資料都會長得是這個樣子。也就是透過mongoose.Schema去定義一筆資料中會包含哪些東西
 const todoSchema = new Schema({
-  name: {
+  agendas: {
     type: String,
     required: true
+  },
+  content: {
+    type: String,
   },
   isDone: {
     type: Boolean,

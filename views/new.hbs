@@ -1,7 +1,18 @@
 <!-- 用 action 屬性來定義表單資料發送的位置，這代表app.js需要再新增一條 POST /todos 路由來接住這筆表單資料。 -->
-<form action="/todos" method="POST" style="display: inline;">
-  <div class="input-group">
-    <input class="form-control me-2" type="text" placeholder="name" name="name">
-    <button class="btn btn-success" type="submit">Create</button>
-  </div>
-</form>
+<div
+  style="text-align: center; z-index: 2; border-radius: 5px; background-color: rgba(255, 255, 255, 0.5); width: 35%;">
+  <form action="/todos" method="POST" style="padding-right: 8px; padding-left: 8px;">
+    <div class="input-group" style="width: 100%">
+      <label for="agendas" style="width: 100%; margin-top: 8px;">
+        <input class="form-control me-2" type="text" placeholder="Agendas" name="agendas" id="agendas"
+          style="width: 100%; padding-left: 5px; text-indent: 6px;">
+      </label>
+      <label for="content" style="width: 100%; margin-top: 8px;">
+        <textarea class="form-control me-2" rows="6" cols="30" placeholder="Text something detail ..." name="content"
+          id="content" style="width: 100%; padding-left: 5px; text-indent: 6px;"></textarea>
+      </label>
+      <button class="btn btn-success" type="submit"
+        style="width: 100%; margin-top: 8px; margin-bottom: 8px;">Create</button>
+    </div>
+  </form>
+</div>
