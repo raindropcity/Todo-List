@@ -1,28 +1,35 @@
-<div class="d-flex flex-row-reverse">
-  <a class="btn btn-warning mb-2" href="/todos/new" style="color: black;">Create</a>
+<div
+  style="text-align: center; z-index: 2; border-radius: 5px; background-color: rgba(255, 255, 255, 0.5); width: 40%; padding: 8px;">
+  <div style="text-align: center; width: 100%;">
+    <a class="btn btn-warning mb-2" href="/todos/new" style="color: black;">Create</a>
+  </div>
+  <ul class="list-group" style="width: 100%;">
+    {{#each todos}}
+    <li class="list-group-item bg-light" style="width: 100%;">
+      <div style="display: flex; flex-direction: row; justify-content: space-between; width: 100%;">
+        <div style="display: flex; align-items: center; width: 50%;">
+          <div
+            style="display: flex; flex-direction: row; justify-content: flex-start; align-items: center; max-width: calc(100% - 20px);">
+            <label for="isDone" style="min-width: 25px;">
+              <input style="vertical-align: middle; width: 20px; height: 20px;" type="checkbox" name="isDone"
+                id="isDone" {{#if this.isDone}} checked {{/if}} disabled>
+            </label>
+            <span
+              style="display: inline-block; font: bold; font-size: larger; vertical-align: middle; text-align: start; margin-left: 5px; width: calc(100% - 25px); word-wrap: break-word;">{{this.agendas}}</span>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: end;">
+          <a class="btn btn-secondary" href="./todos/{{ this._id }}">Detail</a>
+          <a class="btn btn-success" href="./todos/{{ this._id }}/edit" style="margin: 0 1px 0 1px;">Edit</a>
+          <form action="./todos/{{ this._id }}?_method=DELETE" method="POST" style="display: inline-block;">
+            <button class="btn btn-danger" type="submit">Delete</button>
+          </form>
+        </div>
+      </div>
+    </li>
+    {{/each}}
+  </ul>
 </div>
-<ul class="list-group">
-  {{#each todos}}
-  <li class="list-group-item bg-light">
-    <div class="row">
-      <div class="col-auto me-auto">
-        <!-- 這邊是首頁要呈現的地方沒有要讓使用者可以直接勾選是否完成。因此加上disabled屬性，讓checkbox只能看不能勾選 -->
-        <input style="vertical-align: middle; width: 20px; height: 20px;" type="checkbox" name="isDone" {{#if
-          this.isDone}} checked {{/if}} disabled>
-        <h4 class="ms-2" style="display: inline; vertical-align: middle;">{{this.agendas}}</h4>
-      </div>
-      <div class="col-auto">
-        <a class="btn btn-secondary" href="./todos/{{ this._id }}">Detail</a>
-        <a class="btn btn-success" href="./todos/{{ this._id }}/edit">Edit</a>
-        <form action="./todos/{{ this._id }}?_method=DELETE" method="POST" style="display: inline;">
-          <button class="btn btn-danger" type="submit">Delete</button>
-        </form>
-      </div>
-    </div>
-  </li>
-  {{/each}}
-</ul>
-
 {{!--
 「_id」底線id是MongoDB自動為每一筆資料生成的唯一值，因此，雖然沒有在todo.js那個檔案中的Schema設定每一筆資料中應有id值，但_id是內建的，可以開Robo3T去看資料庫中每筆資料的_id值是多少(蠻長的，例如：5e9460ebe0174f4a734ce12a)。之後點擊Detail按鈕後，網址會變這樣：/todos/5e9460ebe0174f4a734ce12a。這是GET的特性。
 --}}
