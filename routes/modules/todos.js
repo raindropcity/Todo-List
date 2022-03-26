@@ -87,21 +87,38 @@ router.get('/new', ensureAuthenticated, (req, res) => {
 })
 
 // 新增一筆資料
-router.post('/', ensureAuthenticated, (req, res) => {
-  const { agendas, content } = req.body // 從 req.body拿出表單裡的agendas資料(關於req.body見password generator專案中有解釋)
+router.post('/', ensureAuthenticated, [check('agendas').trim().notEmpty().withMessage('Agendas is required!').bail()
+  .isLength({ min: 1, max: 20 }).withMessage('Length of Agendas must within 1 to 20!').bail(),
+check('content').trim().isLength({ min: 0, max: 60 }).withMessage('Length of content must be fewer than 60!').bail()],
+  (req, res) => {
+    const { agendas, content } = req.body
+    const errorOfValidation = validationResult(req)
+    // 若物件validationResult(req)裡面有東西，代表沒有通過express-validation驗證
+    if (!errorOfValidation.isEmpty()) {
+      console.log(errorOfValidation.array())
+      const invalidWarnObj = {}
+      errorOfValidation.array().forEach((value) => {
+        invalidWarnObj[`${value.param}`] = value.msg //使用Object的括弧記法將errorOfValidation.array()中的param與msg提取出來，裝進新的物件中
+      })
+      console.log(invalidWarnObj)
+      return res.status(422).render('new', {
+        inputedContent: { agendas, content }, //於頁面保留使用者前次輸入的內容
+        warning: invalidWarnObj //render出各欄位的「無效原因」
+      })
+    }
 
-  // create()：直接呼叫Todo物件新增資料
-  return Todo.create({ agendas, content })
-    .then(() => { res.redirect('/todos') })
-    .catch((error) => console.log(error))
+    // create()：直接呼叫Todo物件新增資料
+    return Todo.create({ agendas, content })
+      .then(() => { res.redirect('/todos') })
+      .catch((error) => console.log(error))
 
-  // 另一種寫法：另外設定一個變數存放新增資料的實體，然後用save()將新增的資料存入資料庫
-  // const todo = new Todo({ name })
-  // // save()：存入資料庫
-  // todo.save()
-  //   .then(() => { res.redirect('/') }) // 資料新增完成後導回首頁
-  //   .catch((error) => { console.error(error) })
-})
+    // 另一種寫法：另外設定一個變數存放新增資料的實體，然後用save()將新增的資料存入資料庫
+    // const todo = new Todo({ name })
+    // // save()：存入資料庫
+    // todo.save()
+    //   .then(() => { res.redirect('/') }) // 資料新增完成後導回首頁
+    //   .catch((error) => { console.error(error) })
+  })
 
 // 瀏覽一筆特定資料，見筆記「動態路由」
 router.get('/:id', ensureAuthenticated, (req, res) => {
@@ -120,36 +137,53 @@ router.get('/:id/edit', ensureAuthenticated, (req, res) => {
   // findById()：以id去資料庫尋找某特定資料
   return Todo.findById(id)
     .lean()
-    .then((todo) => { res.render('edit', { todo: todo }) })
-    .catch((error) => { console.log(error) })
-})
-
-router.put('/:id', ensureAuthenticated, (req, res) => {
-  const id = req.params.id
-  // const name = req.body.name
-  // const isDone = req.body.isDone
-  // 解構賦值，將上面二行的name與isDone變數設定，縮寫成如下這樣。理解方式在於「想要把"req.body物件"裡的屬性一項項拿出來存成變數」。
-  const { agendas, content, isDone } = req.body
-
-  // 在「新增資料」時，比較過 Todo.create() 和 todo.save()，前者是操作整份資料，後者是針對單一資料。
-  // 「新增資料」時兩種作法都可以，而這次因為搭配的資料操作是 Todo.findById，這個方法只會返回一筆資料，所以後面需要接 todo.save() 針對這一筆資料進行儲存
-  // 呼叫了兩次資料操作方法(save()與redirect())，因此有兩段 .then()
-  return Todo.findById(id)
     .then((todo) => {
-      // 用來判斷checkbox有沒有被勾選的條件式，可以優化成這樣。因為(isDone === 'on')的結果就是true或false(使用者有勾選，判斷出來就是true；反之沒勾選，判斷出來就是false)，而資料庫中儲存的isDone欄位本身就是要填布林值，所以剛好直接重新賦值給todo.isDone，就不用寫下面的if/else條件式來判斷todo.isDone應該重新賦值成true還是false了。
-      todo.isDone = (isDone === 'on')
-      // if (isDone === 'on') {
-      //   todo.isDone = true
-      // } else {
-      //   todo.isDone = false
-      // }
-      todo.agendas = agendas
-      todo.content = content
-      return todo.save()
+      res.render('edit', {
+        todo: todo,
+        // 見167行解釋
+        warning: {
+          agendas: req.flash('agendasInvalid'),
+          content: req.flash('contentInvalid')
+        }
+      })
     })
-    .then(() => { res.redirect(`/todos/${id}`) })
     .catch((error) => { console.log(error) })
 })
+
+router.put('/:id', ensureAuthenticated, [check('agendas').trim().notEmpty().withMessage('Agendas is required!').bail()
+  .isLength({ min: 1, max: 20 }).withMessage('Length of Agendas must within 1 to 20!').bail(),
+check('content').trim().isLength({ min: 0, max: 60 }).withMessage('Length of content must be fewer than 60!').bail()],
+  (req, res) => {
+    const id = req.params.id
+    const { agendas, content, isDone } = req.body
+    const errorOfValidation = validationResult(req)
+    // 若物件validationResult(req)裡面有東西，代表沒有通過express-validation驗證
+    if (!errorOfValidation.isEmpty()) {
+      console.log(errorOfValidation.array())
+      const invalidWarnObj = {}
+      errorOfValidation.array().forEach((value) => {
+        invalidWarnObj[`${value.param}`] = value.msg //使用Object的括弧記法將errorOfValidation.array()中的param與msg提取出來，裝進新的物件中
+      })
+      // 這邊因為網址有「:id」不能直接res.render('edit')，要用res.redirect(URL)，配合req.flash在session中設定錯誤提示，如此會重新導回router.get('/:id/edit')那支路由，並在那支路由中res.render出錯誤訊息
+      if (invalidWarnObj.agendas) req.flash('agendasInvalid', `${invalidWarnObj.agendas}`)
+      if (invalidWarnObj.content) req.flash('contentInvalid', `${invalidWarnObj.content}`)
+      return res.status(422).redirect(`/todos/${id}/edit`)
+    }
+
+    // 在「新增資料」時，比較過 Todo.create() 和 todo.save()，前者是操作整份資料，後者是針對單一資料。
+    // 「新增資料」時兩種作法都可以，而這次因為搭配的資料操作是 Todo.findById，這個方法只會返回一筆資料，所以後面需要接 todo.save() 針對這一筆資料進行儲存
+    // 呼叫了兩次資料操作方法(save()與redirect())，因此有兩段 .then()
+    return Todo.findById(id)
+      .then((todo) => {
+        // 用來判斷checkbox有沒有被勾選的條件式，可以優化成這樣。因為(isDone === 'on')的結果就是true或false(使用者有勾選，判斷出來就是true；反之沒勾選，判斷出來就是false)，而資料庫中儲存的isDone欄位本身就是要填布林值，所以剛好直接重新賦值給todo.isDone，就不用寫下面的if/else條件式來判斷todo.isDone應該重新賦值成true還是false了。
+        todo.isDone = (isDone === 'on')
+        todo.agendas = agendas
+        todo.content = content
+        return todo.save()
+      })
+      .then(() => { res.redirect(`/todos/${id}`) })
+      .catch((error) => { console.log(error) })
+  })
 
 // 刪除一筆特定資料
 router.delete('/:id', ensureAuthenticated, (req, res) => {

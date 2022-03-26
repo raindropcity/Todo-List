@@ -5,15 +5,21 @@
     <div class="input-group" style="width: 100%">
       <label for="agendas" style="width: 100%; margin-top: 8px;">
         <input class="form-control me-2" type="text" placeholder="Agendas" name="agendas" id="agendas"
-          style="width: 100%; padding-left: 5px; text-indent: 6px;">
+          style="width: 100%; padding-left: 5px; text-indent: 6px;" value="{{ inputedContent.agendas }}">
       </label>
+      {{#if warning}}
+      <p style="color: crimson; text-align: start; font-weight: bold; margin-bottom: -3px;">{{warning.agendas}}</p>
+      {{/if}}
       <label for="content" style="width: 100%; margin-top: 8px;">
         <textarea class="form-control me-2" rows="6" cols="30" placeholder="Text something detail ..." name="content"
-          id="content" style="width: 100%; padding-left: 5px; text-indent: 6px;"></textarea>
+          id="content" style="width: 100%; padding-left: 5px; text-indent: 6px;">{{ inputedContent.content }}</textarea>
       </label>
+      {{#if warning}}
+      <p style="color: crimson; text-align: start; font-weight: bold; margin-bottom: -3px;">{{warning.content}}</p>
+      {{/if}}
       <button class="btn btn-success" type="submit"
         style="width: 100%; border-radius: 5px; margin-top: 8px; margin-bottom: 8px;">Create</button>
     </div>
-    <a class="btn btn-warning" href="/todos" style="width: 100%; border-radius: 5px; margin-bottom: 8px;">Return</a>
+    <a class="btn btn-warning" href="/todos" style="width: 100%; border-radius: 5px; margin-bottom: 8px;">MainPage</a>
   </form>
 </div>

@@ -18,13 +18,20 @@
               value="{{ todo.agendas }}">
           </label>
         </div>
+        {{#if warning}}
+        <p style="color: crimson; text-align: start; font-weight: bold; margin-bottom: -3px;">
+          {{warning.agendas}}</p>
+        {{/if}}
       </div>
       <label for="content" style="width: 100%; margin-top: 8px;">
         <textarea class="form-control me-2" rows="6" cols="30" placeholder="Text something detail ..." name="content"
           id="content" style="width: 100%; padding-left: 5px; text-indent: 6px;">{{ todo.content }}</textarea>
       </label>
+      {{#if warning}}
+      <p style="color: crimson; text-align: start; font-weight: bold; margin-bottom: -3px;">{{warning.content}}</p>
+      {{/if}}
       <div class="col-auto" style="width: 100%; margin-top: 8px; margin-bottom: 8px; text-align: end;">
-        <a class="btn btn-warning" href="/todos">Return</a>
+        <a class="btn btn-warning" href="/todos">MainPage</a>
         <button class="btn btn-success" type="submit">Save</button>
       </div>
     </div>

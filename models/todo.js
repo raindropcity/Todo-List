@@ -7,7 +7,6 @@ const Schema = mongoose.Schema
 const todoSchema = new Schema({
   agendas: {
     type: String,
-    required: true
   },
   content: {
     type: String,
