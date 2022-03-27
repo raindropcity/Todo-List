@@ -108,7 +108,11 @@ check('content').trim().isLength({ min: 0, max: 60 }).withMessage('Length of con
     }
 
     // create()：直接呼叫Todo物件新增資料
-    return Todo.create({ agendas, content })
+    return Todo.create({
+      userID: req.session.passport.user, //每次使用者新增待辦清單也會一併在資料庫中寫入他的passport ID，讓home.js那支檔案在render出主畫面時，透過搜尋passport ID，只會列出屬於該使用者的清單
+      agendas,
+      content
+    })
       .then(() => { res.redirect('/todos') })
       .catch((error) => console.log(error))
 

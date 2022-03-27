@@ -5,8 +5,9 @@ const express = require('express')
 const router = express.Router()
 // 引用「上一層的上一層的models資料夾中的todo.js檔案」
 const Todo = require('../../models/todo')
+const User = require('../../models/user')
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   if (!req.isAuthenticated()) {
     return res.render('login')
   }
@@ -14,7 +15,7 @@ router.get('/', (req, res) => {
   // lean()：把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列，這裡可以記一個口訣：「撈資料以後想用 res.render()，要先用 .lean() 來處理」。
   // .then() 這一步資料會被放進 todos 變數
   // catch()：如果有錯誤的話先把錯誤內容印出來
-  Todo.find()
+  Todo.find({ userID: req.session.passport.user }) //透過TodoSchema中所設定的userID，搜尋「現正登入的使用者」，只render出屬於該使用者的待辦清單
     .lean()
     .then((todos) => {
       res.render('index', { todos: todos })
