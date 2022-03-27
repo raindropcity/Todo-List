@@ -7,7 +7,7 @@ const router = express.Router()
 const Todo = require('../../models/todo')
 const User = require('../../models/user')
 
-router.get('/', async (req, res) => {
+router.get('/', (req, res) => {
   if (!req.isAuthenticated()) {
     return res.render('login')
   }
