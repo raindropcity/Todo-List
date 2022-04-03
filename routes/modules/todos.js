@@ -190,6 +190,16 @@ check('content').trim().isLength({ min: 0, max: 60 }).withMessage('Length of con
   })
 
 // 刪除一筆特定資料
+router.get('/:id/delete', ensureAuthenticated, (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id)
+    .lean()
+    .then((todo) => {
+      return res.render('delete', { todo: todo })
+    })
+    .catch((error) => { console.log(error) })
+})
+
 router.delete('/:id', ensureAuthenticated, (req, res) => {
   const id = req.params.id
   // 呼叫了兩次資料操作方法(remove()與redirect())，因此有兩段 .then()

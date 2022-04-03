@@ -1,13 +1,16 @@
 <div
-  style="text-align: center; z-index: 2; border-radius: 5px; background-color: rgba(255, 255, 255, 0.5); width: 40%; padding: 8px;">
-  <div style="text-align: center; width: 100%;">
-    <a class="btn btn-warning mb-2" href="/todos/new" style="color: black;">Create</a>
+  style="text-align: center; z-index: 2; border:rgba(57, 57, 214, 0.5) solid 3px; border-radius: 5px; background-color: rgba(255, 255, 255, 0.5); width: 40%; padding: 8px;">
+  <div style="text-align: center; width: 100%; margin-bottom: 8px; margin-top: 5px;">
+    <a href="/todos/new"
+      style="color: black; text-decoration: none; border: 2px; border-bottom-style: solid; padding: 2px;"><i
+        class="fas fa-plus" style="margin-right: 3px;"></i>New Task</a>
   </div>
   <ul class="list-group" style="width: 100%;">
     {{#each todos}}
     <li class="list-group-item bg-light" style="width: 100%;">
       <div style="display: flex; flex-direction: row; justify-content: space-between; width: 100%;">
-        <div style="display: flex; align-items: center; width: 50%;">
+        <a style="display: flex; align-items: center; width: 80%; text-decoration: none; color: black;"
+          href="./todos/{{ this._id }}">
           <div
             style="display: flex; flex-direction: row; justify-content: flex-start; align-items: center; max-width: calc(100% - 20px);">
             <label for="isDone" style="min-width: 25px;">
@@ -17,13 +20,12 @@
             <span
               style="display: inline-block; font: bold; font-size: larger; vertical-align: middle; text-align: start; margin-left: 5px; width: calc(100% - 25px); word-wrap: break-word;">{{this.agendas}}</span>
           </div>
-        </div>
+        </a>
         <div style="display: flex; align-items: center; justify-content: end;">
-          <a class="btn btn-secondary" href="./todos/{{ this._id }}">Detail</a>
-          <a class="btn btn-success" href="./todos/{{ this._id }}/edit" style="margin: 0 1px 0 1px;">Edit</a>
-          <form action="./todos/{{ this._id }}?_method=DELETE" method="POST" style="display: inline-block;">
-            <button class="btn btn-danger" type="submit">Delete</button>
-          </form>
+          <a href="./todos/{{ this._id }}/edit" style="margin: 0 1px 0 1px;"><i class="fas fa-edit"
+              style="font-size: larger; color: rgb(50, 50, 50);"></i></a>
+          <a href="./todos/{{ this._id }}/delete" style="margin: 0 1px 0 1px;"><i class="fas fa-trash"
+              style="font-size: larger; color: rgb(50, 50, 50);"></i></a>
         </div>
       </div>
     </li>

@@ -1,6 +1,6 @@
 <div
-  style="text-align: center; z-index: 2; border-radius: 5px; background-color: rgba(255, 255, 255, 0.5); width: 35%;">
-  <form action="/todos/{{ todo._id }}?_method=DELETE" method="POST"
+  style="text-align: center; z-index: 2; border:rgba(135, 135, 139, 0.5) solid 3px; border-radius: 5px; background-color: rgba(255, 255, 255, 0.5); width: 35%;">
+  <form action="/todos/{{ todo._id }}/delete" method="GET"
     style="padding-right: 8px; padding-left: 8px; width: 100%">
     <div class="input-group" style="width: 100%; margin-top: 8px">
       <div class="col-auto" style="width: 100%; text-align: start; vertical-align: middle;">
@@ -15,19 +15,22 @@
           style="display: inline-block; width: calc(100% - (35vw / 12.5) - 8px); vertical-align: middle; text-align: center;">
           <label for="agendas" style="width: 100%;">
             <input class="form-control" type="text" placeholder="Agendas" name="agendas" id="agendas"
-              value="{{ todo.agendas }}" disabled>
+              style="color: rgb(110, 110, 110);" value="{{ todo.agendas }}" disabled>
           </label>
         </div>
       </div>
       <label for="content" style="width: 100%; margin-top: 8px;">
         <textarea class="form-control me-2" rows="6" cols="30" placeholder="Text something detail ..." name="content"
-          id="content" style="width: 100%; padding-left: 5px; text-indent: 6px;" disabled>{{ todo.content }}</textarea>
+          id="content" style="width: 100%; padding-left: 5px; text-indent: 6px; color: rgb(110, 110, 110);"
+          disabled>{{ todo.content }}</textarea>
       </label>
       <div class="col-auto" style="width: 100%; margin-top: 8px; margin-bottom: 8px; text-align: end;">
         <!-- 路徑用 / 開頭，表示「從根目錄開始」，若用 ./ 代表「從同一層資料夾開始」 -->
-        <a class="btn btn-success" href="/todos/{{ todo._id }}/edit">Edit</a>
-        <a class="btn btn-warning" href="/todos">MainPage</a>
-        <button class="btn btn-danger" type="submit">Delete</button>
+        <a class="btn btn-secondary" href="/todos">MainPage</a>
+        <a href="/todos/{{ todo._id }}/edit" style="margin-left: 10px;"><i class="fas fa-edit"
+            style="font-size: larger; color: rgb(50, 50, 50);"></i></a>
+        <button type="submit" style="border: 0px; background-color: rgba(206, 204, 204, 0.5);"><i
+            class="fas fa-trash" style="font-size: larger; color: rgb(50, 50, 50);"></i></button>
       </div>
     </div>
   </form>
