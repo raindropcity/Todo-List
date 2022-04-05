@@ -8,8 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "todoSeed": "node models/seeds/todoSeeder.js",
     "userSeed": "node models/seeds/userSeeder.js",
-    "start": "node app.js",
-    "postinstall": "ng build"
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "",
