@@ -8,8 +8,6 @@
     "npm": "6.14.11"
   },
   "scripts": {
-    "build": "npm run build",
-    "postinstall": "npm run build",
     "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "todoSeed": "node models/seeds/todoSeeder.js",
