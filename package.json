@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "install": "npm install",
     "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "todoSeed": "node models/seeds/todoSeeder.js",
@@ -27,6 +28,8 @@
     "nodemon": "^2.0.15",
     "passport": "^0.5.2",
     "passport-http": "^0.3.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "webpack": "^5.71.0",
+    "webpack-cli": "^4.9.2"
   }
 }
