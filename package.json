@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "build": "ng build",
-    "postinstall": "ng build",
+    "postbuild": "ng build",
+    "postinstall": "npm run build",
     "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "todoSeed": "node models/seeds/todoSeeder.js",
