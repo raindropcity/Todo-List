@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
+    "build": "npm test",
     "postinstall": "npm run build",
     "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
