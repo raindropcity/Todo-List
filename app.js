@@ -15,7 +15,6 @@ const flash = require('connect-flash')
 
 // 定義連接埠號。Heroku 會把 port 的埠號放在環境參數 process.env.PORT 裡。
 const PORT = process.env.PORT || 3000
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/todo_list'
 
 // 引用Mongoose連線設定。這邊沒有將require存入const中，是因為mongoose.js中所寫的module.exports匯出的東西是db，是要給todoSeeder.js使用的，且app.js裡後續也沒有要再用到此連線設定。因此這邊直接寫require('./config/mongoose')，代表在執行app.js時一併執行mongoose.js。
 require('./config/mongoose')
@@ -40,7 +39,7 @@ app.use(session({
   resave: false, //不論 request 的過程中有無變更都重新將 session 儲存在 session store。
   saveUninitialized: false, //將 uninitialized session（新的、未被變更過的） 儲存在 session store 中。
   store: new MongoDBStore({
-    uri: MONGODB_URI,
+    uri: process.env.MONGODB_URI || 'mongodb://localhost/todo_list',
     collection: 'mySessions'
   }) //設定session要存放的資料庫位子(存在MongoDB裡面)
 }))
