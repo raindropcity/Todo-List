@@ -88,8 +88,8 @@ router.get('/new', ensureAuthenticated, (req, res) => {
 
 // 新增一筆資料
 router.post('/', ensureAuthenticated, [check('agendas').trim().notEmpty().withMessage('Agendas is required!').bail()
-  .isLength({ min: 1, max: 20 }).withMessage('Length of Agendas must within 1 to 20!').bail(),
-check('content').trim().isLength({ min: 0, max: 60 }).withMessage('Length of content must be fewer than 60!').bail()],
+  .isLength({ min: 1, max: 30 }).withMessage('Length of Agendas must within 1 to 30!').bail(),
+check('content').trim().isLength({ min: 0, max: 200 }).withMessage('Length of content must be fewer than 200!').bail()],
   (req, res) => {
     const { agendas, content } = req.body
     const errorOfValidation = validationResult(req)
@@ -155,8 +155,8 @@ router.get('/:id/edit', ensureAuthenticated, (req, res) => {
 })
 
 router.put('/:id', ensureAuthenticated, [check('agendas').trim().notEmpty().withMessage('Agendas is required!').bail()
-  .isLength({ min: 1, max: 20 }).withMessage('Length of Agendas must within 1 to 20!').bail(),
-check('content').trim().isLength({ min: 0, max: 60 }).withMessage('Length of content must be fewer than 60!').bail()],
+  .isLength({ min: 1, max: 30 }).withMessage('Length of Agendas must within 1 to 30!').bail(),
+check('content').trim().isLength({ min: 0, max: 200 }).withMessage('Length of content must be fewer than 200!').bail()],
   (req, res) => {
     const id = req.params.id
     const { agendas, content, isDone } = req.body
